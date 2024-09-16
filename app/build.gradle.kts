@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("androidx.navigation.safeargs")
     id("kotlin-kapt")
 
 }
@@ -45,9 +44,6 @@ dependencies {
     //coroutine
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.core:core-ktx:1.13.1")
-    // navigation component
-    implementation("androidx.navigation:navigation-fragment:2.8.0")
-    implementation("androidx.navigation:navigation-ui:2.8.0")
     //room
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")

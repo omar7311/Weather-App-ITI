@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">Weather-App-ITI</string>
+    <string name="app_name">Weather App</string>
     <string name="weather_app_key">ef45b67ce37bc90f449323894302c562</string>
+    <string name="Home">Home</string>
+    <string name="Favourite">Favourite</string>
+    <string name="Alert">Alert</string>
+    <string name="Setting">Setting</string>
 </resources>
