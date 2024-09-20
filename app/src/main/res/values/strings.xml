@@ -5,4 +5,17 @@
     <string name="Favourite">Favourite</string>
     <string name="Alert">Alert</string>
     <string name="Setting">Setting</string>
+    <string name="location">Location :</string>
+    <string name="gps">GPS</string>
+    <string name="map">Map</string>
+    <string name="language">Language :</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="alert">Alert :</string>
+    <string name="alarm">Alarm</string>
+    <string name="notification">Notification</string>
+    <string name="unit">Units :</string>
+    <string name="standard">Standard : (temp:Kelvin) , (wind:meter/sec)</string>
+    <string name="metric">Metric : (temp:Celsius) , (wind:meter/sec)</string>
+    <string name="imperial">Imperial : (temp:Fahrenheit) , (wind:miles/hour)</string>
 </resources>

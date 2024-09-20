@@ -10,7 +10,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_100sdp"
-        android:src="@drawable/ic_launcher_foreground"/>
+        android:src="@drawable/weather_app_logo"/>
 
     <TextView
         android:layout_width="0dp"
