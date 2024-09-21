@@ -1,14 +1,21 @@
 package com.example.weather_app_iti
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.weather_app_iti.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener{
     lateinit var binding:ActivityMainBinding
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
@@ -22,6 +29,16 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment,HomeFragment()).commit()
         supportActionBar?.title = getString(R.string.Home)
         binding.navView.setNavigationItemSelectedListener(this)
+        lifecycleScope.launch {
+            Log.d("key",RemoteDataSource().getWeatherData(
+                "12.5",
+                "15.9",
+                getString(R.string.weather_app_key),
+                getString(R.string.metric),
+                getString(R.string.english),
+                false).time)
+        }
+
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

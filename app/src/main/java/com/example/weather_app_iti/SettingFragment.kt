@@ -14,14 +14,16 @@ class SettingFragment : Fragment() {
     lateinit var binding: FragmentSettingBinding
     lateinit var sharedPreferences: SharedPreferences
     lateinit var editor: SharedPreferences.Editor
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedPreferences=requireActivity().getPreferences(Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSettingBinding.inflate(inflater, container, false)
-        sharedPreferences=requireActivity().getPreferences(Context.MODE_PRIVATE)
-        editor = sharedPreferences.edit()
        setupSetting()
        setupOnCheckedRadioGroups()
         return binding.root

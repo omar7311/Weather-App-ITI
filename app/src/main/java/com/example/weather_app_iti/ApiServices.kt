@@ -2,19 +2,20 @@ package com.example.weather_app_iti
 
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiServices {
-    @GET("weather?lat={lat}&lon={lon}&appid={API key}&units={units}&lang={lang}")
-    suspend  fun getCurrentWeather(@Path("lat") lat:Double,
-                                   @Path("lon") lon:Double,
-                                   @Path("API key") key:Long,
-                                   @Path("units") units:String,
-                                   @Path("lang") lang:String): ResponseCurrentWeather
+    @GET("weather")
+    suspend  fun getCurrentWeather(@Query("lat") lat:String,
+                                   @Query("lon") lon:String,
+                                   @Query("appid") key:String,
+                                   @Query("units") units:String,
+                                   @Query("lang") lang:String): ResponseCurrentWeather
 
-    @GET("forecast?lat={lat}&lon={lon}&appid={API key}&units={units}&lang={lang}")
-    suspend  fun get5days3hoursForecast(@Path("lat") lat:Double,
-                                   @Path("lon") lon:Double,
-                                   @Path("API key") key:Long,
-                                   @Path("units") units:String,
-                                   @Path("lang") lang:String): Response5days3hours
+    @GET("forecast")
+    suspend  fun get5days3hoursForecast(@Query("lat") lat:String,
+                                   @Query("lon") lon:String,
+                                   @Query("appid") key:String,
+                                   @Query("units") units:String,
+                                   @Query("lang") lang:String): Response5days3hours
 }
