@@ -2,19 +2,20 @@ package com.example.weather_app_iti
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class Repository(private val remoteDataSource: IRemoteDataSource,private val localDataSource: ILocalDataSource) :
     IRepository {
     @RequiresApi(Build.VERSION_CODES.O)
-    override suspend fun getWeatherData(
+    override fun getWeatherData(
         lat: String,
         lon: String,
         key: String,
         units: String,
         lang: String,
         fav: Boolean
-    ): CurrentWeatherData {
+    ): Flow<CurrentWeatherData> {
         return remoteDataSource.getWeatherData(lat,lon,key,units,lang,fav)
     }
 
@@ -26,7 +27,7 @@ class Repository(private val remoteDataSource: IRemoteDataSource,private val loc
          emit(localDataSource.getAlerts())
     }
 
-    override suspend fun getCurrentWeatherData(id: String, fav: Boolean): CurrentWeatherData {
+    override fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData> {
         return localDataSource.getCurrentWeatherData(id, fav)
     }
 

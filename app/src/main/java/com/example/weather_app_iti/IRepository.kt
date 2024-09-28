@@ -6,18 +6,18 @@ import kotlinx.coroutines.flow.Flow
 
 interface IRepository {
     @RequiresApi(Build.VERSION_CODES.O)
-    suspend fun getWeatherData(
+    fun getWeatherData(
         lat: String,
         lon: String,
         key: String,
         units: String,
         lang: String,
         fav: Boolean
-    ): CurrentWeatherData
+    ): Flow<CurrentWeatherData>
 
     suspend fun getFavourites(): Flow<MutableList<FavouriteCity>>
     suspend fun getAlerts(): Flow<MutableList<Alert>>
-    suspend fun getCurrentWeatherData(id: String, fav: Boolean): CurrentWeatherData
+     fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData>
 
     suspend fun insertCurrentWeatherData(currentWeatherData: CurrentWeatherData)
 

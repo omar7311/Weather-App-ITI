@@ -7,7 +7,7 @@ interface ILocalDataSource {
 
     suspend fun getAlerts(): MutableList<Alert>
 
-    suspend fun getCurrentWeatherData(id: String, fav: Boolean): CurrentWeatherData
+    fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData>
 
     suspend fun insertCurrentWeatherData(currentWeatherData: CurrentWeatherData)
 

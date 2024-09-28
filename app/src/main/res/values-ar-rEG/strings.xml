@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">تطبيق الطقس</string>
+    <string name="weather_app_key">ef45b67ce37bc90f449323894302c562</string>
+    <string name="Home">الرئيسية</string>
+    <string name="Favourite">المفضلة</string>
+    <string name="Alert">التنبيهات</string>
+    <string name="Setting">الاعدادات</string>
+    <string name="location">الموقع :</string>
+    <string name="gps">جي بي اس</string>
+    <string name="map">خريطة</string>
+    <string name="Gps">gps</string>
+    <string name="Map">map</string>
+    <string name="language">اللغة :</string>
+    <string name="arabic">عربي</string>
+    <string name="english">انجليزي</string>
+    <string name="ar">ar</string>
+    <string name="en">en</string>
+    <string name="alert">التنبيه :</string>
+    <string name="alarm">المنبه</string>
+    <string name="notification">الاشعارات</string>
+    <string name="unit">الوحدات :</string>
+    <string name="standard">Standard</string>
+    <string name="metric">Metric</string>
+    <string name="imperial">Imperial</string>
+    <string name="standard_details">قياسي :\n (درجة الحرارة:كلفين) , (سرعة الرياح:متر/ثانية)</string>
+    <string name="metric_details">متري :\n(درجة الحرارة:سيليزيس) , (سرعة الرياح:متر/ثانية)</string>
+    <string name="imperial_details">امبراطوري :\n(درجة الحرارة:فيرنهايت) , (سرعة الرياح:ميل/ساعة)</string>
+    <string name="pressure">الضغط</string>
+    <string name="humidity">الرطوبة</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="cloud">السحاب</string>
+    <string name="no_internet_connection">لا يوجد اتصال بالانترنت</string>
+    <string name="need_permission">بحاجة الي اذن</string>
+    <string name="permission_message">التطبيق لا يعمل بدون اذن الموقع</string>
+    <string name="ok">حسنا</string>
+    <string name="something_went_wrong">حدث خطأ اما</string>
+    <string name="check_permission_grantee_n_check_location_status_n_check_internet_connection">تحقق من منح الاذن \n تحقق من تفعيل الموقع \n تحقق من الاتصال بالانترنت</string>
+    <string name="map_api_key">AIzaSyAN-HL6BTQZo5JdYmBa1ZhsXjTO4k5J3IA</string>
+    <string name="save">حفظ</string>
+    <string name="google_map">خريطة جوجل</string>
+
+</resources>

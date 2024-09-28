@@ -2,6 +2,7 @@ package com.example.weather_app_iti
 
 import android.content.Context
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class LocalDataSource(private val context: Context) : ILocalDataSource {
      override suspend fun getFavourites(): MutableList<FavouriteCity> {
@@ -10,7 +11,7 @@ class LocalDataSource(private val context: Context) : ILocalDataSource {
      override suspend fun getAlerts(): MutableList<Alert> {
          return WeatherDatabase.getInstance(context).getWeatherDao().getAlerts()
     }
-     override suspend fun getCurrentWeatherData(id: String, fav: Boolean): CurrentWeatherData {
+     override fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData>{
          return WeatherDatabase.getInstance(context).getWeatherDao().getCurrentWeatherData(id,fav)
     }
      override suspend fun insertCurrentWeatherData(currentWeatherData: CurrentWeatherData) {

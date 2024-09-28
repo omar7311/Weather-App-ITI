@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
 }
 
@@ -41,17 +42,24 @@ android {
 }
 
 dependencies {
+    implementation ("org.osmdroid:osmdroid-android:6.1.11")
+    //gps-location
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    // circle imageview
+    implementation("de.hdodenhof:circleimageview:3.1.0")
     //view model
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.5")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
     // Lifecycles only (without ViewModel or LiveData)
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.5")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
     //coroutine
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.core:core-ktx:1.13.1")
     //room
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

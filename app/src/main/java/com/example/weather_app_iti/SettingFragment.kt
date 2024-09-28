@@ -7,8 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.example.weather_app_iti.databinding.FragmentSettingBinding
-import java.util.prefs.Preferences
 
 class SettingFragment : Fragment() {
     lateinit var binding: FragmentSettingBinding
@@ -29,32 +29,59 @@ class SettingFragment : Fragment() {
         return binding.root
     }
     private fun setupSetting(){
-        binding.locationRG.check(sharedPreferences.getInt(Settings.locationKey,binding.gps.id))
-        binding.languageRG.check(sharedPreferences.getInt(Settings.languageKey,binding.en.id))
-        binding.alertRG.check(sharedPreferences.getInt(Settings.alertKey,binding.alarm.id))
-        binding.unitsRG.check(sharedPreferences.getInt(Settings.unitsKey,binding.standard.id))
+        when(sharedPreferences.getString(Setting.locationKey,getString(R.string.Gps)))
+        {
+            getString(R.string.Map)->binding.locationRG.check(binding.map.id)
+            getString(R.string.Gps)->binding.locationRG.check(binding.gps.id)
+
+        }
+        when(sharedPreferences.getString(Setting.alertKey,getString(R.string.alarm)))
+        {
+            getString(R.string.alarm)->binding.alertRG.check(binding.alarm.id)
+            getString(R.string.notification)->binding.alertRG.check(binding.notify.id)
+
+        }
+        when(sharedPreferences.getString(Setting.languageKey,getString(R.string.en)))
+        {
+            getString(R.string.en)->binding.languageRG.check(binding.en.id)
+            getString(R.string.ar)->binding.languageRG.check(binding.ar.id)
+
+        }
+        when(sharedPreferences.getString(Setting.unitsKey,getString(R.string.standard)))
+        {
+            getString(R.string.standard)->binding.unitsRG.check(binding.standard.id)
+            getString(R.string.metric)->binding.unitsRG.check(binding.metric.id)
+            getString(R.string.imperial)->binding.unitsRG.check(binding.imperial.id)
+
+        }
+
     }
     private fun setupOnCheckedRadioGroups(){
         binding.locationRG.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 binding.gps.id -> {
-                    editor.putInt(Settings.locationKey,binding.gps.id)
+                    editor.putString(Setting.locationKey,getString(R.string.Gps))
                     editor.commit()
                 }
                 binding.map.id -> {
-                    editor.putInt(Settings.locationKey,binding.map.id)
+                    editor.putString(Setting.locationKey,getString(R.string.Map))
                     editor.commit()
+                    val fragment=MapsFragment()
+                    fragment.label="Setting"
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .replace(R.id.nav_host_fragment,fragment).commit()
+                    (activity as AppCompatActivity).supportActionBar?.title=getString(R.string.google_map)
                 }
             }
         }
         binding.alertRG.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 binding.alarm.id -> {
-                    editor.putInt(Settings.alertKey,binding.alarm.id)
+                    editor.putString(Setting.alertKey,getString(R.string.alarm))
                     editor.commit()
                 }
                 binding.notify.id -> {
-                    editor.putInt(Settings.alertKey,binding.notify.id)
+                    editor.putString(Setting.alertKey,getString(R.string.notification))
                     editor.commit()
                 }
             }
@@ -62,27 +89,34 @@ class SettingFragment : Fragment() {
         binding.languageRG.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 binding.ar.id -> {
-                    editor.putInt(Settings.languageKey,binding.ar.id)
+                    editor.putString(Setting.languageKey,getString(R.string.ar))
                     editor.commit()
+                    Setting.setLocale(requireContext(),"ar")
+                    requireActivity().recreate()
+                    requireActivity().window.decorView.layoutDirection = View.LAYOUT_DIRECTION_RTL
                 }
                 binding.en.id -> {
-                    editor.putInt(Settings.languageKey,binding.en.id)
+                    editor.putString(Setting.languageKey,getString(R.string.en))
                     editor.commit()
+                    Setting.setLocale(requireContext(),"en")
+                    requireActivity().recreate()
+                    requireActivity().window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
+
                 }
             }
         }
         binding.unitsRG.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 binding.standard.id -> {
-                    editor.putInt(Settings.unitsKey,binding.standard.id )
+                    editor.putString(Setting.unitsKey,getString(R.string.standard) )
                     editor.commit()
                 }
                 binding.metric.id -> {
-                    editor.putInt(Settings.unitsKey,binding.metric.id)
+                    editor.putString(Setting.unitsKey,getString(R.string.metric))
                     editor.commit()
                 }
                 binding.imperial.id -> {
-                    editor.putInt(Settings.unitsKey,binding.imperial.id)
+                    editor.putString(Setting.unitsKey,getString(R.string.imperial))
                     editor.commit()
                 }
             }

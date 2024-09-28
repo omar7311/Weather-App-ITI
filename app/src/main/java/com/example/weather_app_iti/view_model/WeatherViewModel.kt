@@ -10,20 +10,26 @@ import com.example.weather_app_iti.Alert
 import com.example.weather_app_iti.CurrentWeatherData
 import com.example.weather_app_iti.FavouriteCity
 import com.example.weather_app_iti.IRepository
+import com.example.weather_app_iti.List3hours
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(private var repo: IRepository):ViewModel() {
-    private val favCities:MutableLiveData<MutableList<FavouriteCity>> =MutableLiveData()
-    var fav_cities:LiveData<MutableList<FavouriteCity>> =favCities
-   private val alerts:MutableLiveData<List<Alert>> = MutableLiveData<List<Alert>>()
-    var _alerts:LiveData<List<Alert>> =alerts
-    private val currentWeatherData:MutableLiveData<CurrentWeatherData> = MutableLiveData()
-    var _currentWeatherData:LiveData<CurrentWeatherData> =currentWeatherData
-
+    private val favCities:MutableStateFlow<MutableList<FavouriteCity>> =MutableStateFlow(mutableListOf())
+    var fav_cities:StateFlow<MutableList<FavouriteCity>> =favCities
+   private val alerts:MutableStateFlow<List<Alert>> = MutableStateFlow(mutableListOf())
+    var _alerts:StateFlow<List<Alert>> =alerts
+    private var weatherData= MutableStateFlow<ApiState>(ApiState.Loading)
+    var _weatherData:StateFlow<ApiState> =weatherData
+    private var currentWeatherData= MutableStateFlow<ApiState>(ApiState.Loading)
+    var _currentWeatherData:StateFlow<ApiState> =currentWeatherData
      fun getAlerts(){
          viewModelScope.launch {
              repo.getAlerts().collect{
-                 alerts.postValue(it)
+                 alerts.emit(it)
              }
          }
 
@@ -31,13 +37,13 @@ class WeatherViewModel(private var repo: IRepository):ViewModel() {
       fun getFavourites(){
           viewModelScope.launch {
               repo.getFavourites().collect{
-                 favCities.postValue(it)
+                 favCities.emit(it)
               }
           }
     }
 
      @RequiresApi(Build.VERSION_CODES.O)
-     fun getWeatherData(
+    fun getWeatherData(
         lat: String,
         lon: String,
         key: String,
@@ -45,14 +51,22 @@ class WeatherViewModel(private var repo: IRepository):ViewModel() {
         lang: String,
         fav: Boolean
     ) {
-         viewModelScope.launch {
-           currentWeatherData.postValue(repo.getWeatherData(lat,lon,key,units,lang,fav))
+         viewModelScope.launch(Dispatchers.IO) {
+          repo.getWeatherData(lat,lon,key,units,lang,fav).catch {
+              weatherData.value=ApiState.Failure(it)
+          }.collect{
+             weatherData.value=ApiState.Success(it)
+          }
          }
     }
 
-    fun getCurrentWeatherData(id: String, fav: Boolean) {
-        viewModelScope.launch {
-           currentWeatherData.postValue(repo.getCurrentWeatherData(id,fav))
+   fun getCurrentWeatherData(id: String, fav: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getCurrentWeatherData(id, fav).catch {
+                currentWeatherData.value=ApiState.Failure(it)
+            } .collect{
+                    currentWeatherData.value = ApiState.Success(it)
+            }
         }
     }
 

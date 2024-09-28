@@ -14,7 +14,7 @@ interface WeatherDao {
     @Query("select * from alert_table")
     suspend fun getAlerts(): MutableList<Alert>
     @Query("select * from weather_table where id=:id and fav=:fav")
-    suspend fun getCurrentWeatherData(id:String, fav:Boolean): CurrentWeatherData
+    fun getCurrentWeatherData(id:String, fav:Boolean): Flow<CurrentWeatherData>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCurrentWeatherData(currentWeatherData: CurrentWeatherData)
     @Insert(onConflict = OnConflictStrategy.IGNORE)

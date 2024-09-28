@@ -13,7 +13,7 @@ data class Response5days3hours(
 	val list: List<ListItem>
 )
 data class ListItem(
-	val dtTxt: String,
+	val dt_txt: String,
 	val weather: List<WeatherItem>,
 	val main: Main,
 	val clouds: Clouds,

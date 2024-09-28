@@ -20,8 +20,8 @@ data class CurrentWeatherData(
     var icon: String,
     var weatherDescription: String,
     var fav:Boolean,
-    var list3hours: MutableList<List3hours>,
-    var list5days: MutableList<List5days>
+    var list3hours:MutableList<List3hours>,
+    var list5days:MutableList<List5days>
 )
 @Entity(tableName = "fav_table")
 data class FavouriteCity(

@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface ApiServices {
     @GET("weather")
-    suspend  fun getCurrentWeather(@Query("lat") lat:String,
+    suspend fun getCurrentWeather(@Query("lat") lat:String,
                                    @Query("lon") lon:String,
                                    @Query("appid") key:String,
                                    @Query("units") units:String,

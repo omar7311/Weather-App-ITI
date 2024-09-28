@@ -43,14 +43,14 @@
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/gps"
                     android:text="@string/gps"
-                    android:textSize="@dimen/_12ssp"
+                    android:textSize="@dimen/_12sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/map"
                     android:text="@string/map"
-                    android:textSize="@dimen/_12ssp"
-                    android:layout_marginStart="@dimen/_32sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RadioGroup>
@@ -189,19 +189,19 @@
                >
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/standard"
-                    android:text="@string/standard"
+                    android:text="@string/standard_details"
                     android:textSize="@dimen/_12sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/metric"
-                    android:text="@string/metric"
+                    android:text="@string/metric_details"
                     android:textSize="@dimen/_12sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/imperial"
-                    android:text="@string/imperial"
+                    android:text="@string/imperial_details"
                     android:textSize="@dimen/_12sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

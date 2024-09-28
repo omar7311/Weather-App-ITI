@@ -1,25 +1,41 @@
 package com.example.weather_app_iti
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.os.Looper
+import android.provider.Settings
+import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.lifecycleScope
 import com.example.weather_app_iti.databinding.ActivityMainBinding
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelectedListener{
     lateinit var binding:ActivityMainBinding
+    lateinit var sharedPreferences: SharedPreferences
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences=getPreferences(MODE_PRIVATE)
+        val lang=sharedPreferences.getString(Setting.languageKey,getString(R.string.en))
+        if(lang!=null) Setting.setLocale(this,lang)
         setSupportActionBar(binding.toolBar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
@@ -29,16 +45,9 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment,HomeFragment()).commit()
         supportActionBar?.title = getString(R.string.Home)
         binding.navView.setNavigationItemSelectedListener(this)
-        lifecycleScope.launch {
-            Log.d("key",RemoteDataSource().getWeatherData(
-                "12.5",
-                "15.9",
-                getString(R.string.weather_app_key),
-                getString(R.string.metric),
-                getString(R.string.english),
-                false).time)
-        }
-
+    }
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(Setting.onAttach(newBase))
     }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -63,6 +72,8 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId==R.id.reload) recreate()
+
         if (item.itemId == android.R.id.home) {
             if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
                 binding.drawer.closeDrawer(GravityCompat.START)
@@ -72,6 +83,12 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         }
         return true
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu,menu)
+        return true
+    }
+
 }
 
 
