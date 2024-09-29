@@ -32,30 +32,43 @@ import java.util.Locale
 
 class MapsFragment : Fragment() {
      var label=""
-
+lateinit var viewModel: WeatherViewModel
+lateinit var factory: WeatherViewModelFactory
     @RequiresApi(Build.VERSION_CODES.O)
     private val callback = OnMapReadyCallback { googleMap ->
         googleMap.setOnMapClickListener {
-            val lat= it.latitude
-            val lon=it.longitude
+            val lat= truncateToFourDecimalPlaces(it.latitude)
+            val lon=truncateToFourDecimalPlaces(it.longitude)
             googleMap.clear()
-            googleMap.addMarker(MarkerOptions().position(it).title(getCityFromLocation(lat,lon)))
-            showConfirmationBottomSheet(lat, lon)
+           googleMap.addMarker(MarkerOptions().position(it).title(getCityFromLocation(lat,lon)))
+           showConfirmationBottomSheet(lat, lon)
 
         }
         val sydney = LatLng(29.9737, 31.2544)
         googleMap.addMarker(MarkerOptions().position(sydney).title("Maddi , Cairo"))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
+    fun truncateToFourDecimalPlaces(num: Double): Double {
+        val factor = 10000.0
+        return (num * factor).toLong() / factor
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setupViewModel()
         Toast.makeText(requireActivity(),label,Toast.LENGTH_LONG).show()
         return inflater.inflate(R.layout.fragment_maps, container, false)
     }
-
+    private fun setupViewModel(){
+        factory = WeatherViewModelFactory(
+            Repository(
+                RemoteDataSource(), LocalDataSource(requireContext())
+            )
+        )
+        viewModel = ViewModelProvider(this, factory).get(WeatherViewModel::class.java)
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -86,7 +99,8 @@ class MapsFragment : Fragment() {
                     (activity as AppCompatActivity).supportActionBar?.title=getString(R.string.Home)
 
                 }
-                "favourite"->{
+                "Favourite"->{
+                    viewModel.insertFavourite(FavouriteCity("$lat$lon",lon,lat,getCityFromLocation(lat,lon)))
                     requireActivity().supportFragmentManager.beginTransaction()
                     .replace(R.id.nav_host_fragment,FavouriteFragment()).commit()
                 }
@@ -100,7 +114,7 @@ class MapsFragment : Fragment() {
         try {
             val addresses = geocoder.getFromLocation(latitude, longitude, 1)
             if (addresses != null && addresses.isNotEmpty()) {
-                 return addresses[0].adminArea
+                 return addresses[0].subAdminArea
             } else {
                return "no city found"
             }

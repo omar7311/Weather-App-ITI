@@ -3,9 +3,9 @@ package com.example.weather_app_iti
 import kotlinx.coroutines.flow.Flow
 
 interface ILocalDataSource {
-    suspend fun getFavourites(): MutableList<FavouriteCity>
+     fun getFavourites(): Flow<MutableList<FavouriteCity>>
 
-    suspend fun getAlerts(): MutableList<Alert>
+     fun getAlerts(): Flow<MutableList<Alert>>
 
     fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData>
 

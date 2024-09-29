@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/_16sdp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/title_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/weather_app_alarm"
+        android:textSize="@dimen/_18sdp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/message_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/it_is_time_to_know_weather_news"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="@android:color/darker_gray"/>
+
+    <!-- Add the Stop button to stop the alarm -->
+    <Button
+        android:id="@+id/stop_alarm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stop_alarm"
+        android:layout_gravity="end"
+        android:backgroundTint="@android:color/holo_red_light"/>
+</LinearLayout>

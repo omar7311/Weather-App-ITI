@@ -16,7 +16,7 @@ class SettingFragment : Fragment() {
     lateinit var editor: SharedPreferences.Editor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences=requireActivity().getPreferences(Context.MODE_PRIVATE)
+        sharedPreferences=requireActivity().getSharedPreferences("setup_setting",Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
     }
     override fun onCreateView(
@@ -35,10 +35,10 @@ class SettingFragment : Fragment() {
             getString(R.string.Gps)->binding.locationRG.check(binding.gps.id)
 
         }
-        when(sharedPreferences.getString(Setting.alertKey,getString(R.string.alarm)))
+        when(sharedPreferences.getString(Setting.alertKey,getString(R.string.Alarm)))
         {
-            getString(R.string.alarm)->binding.alertRG.check(binding.alarm.id)
-            getString(R.string.notification)->binding.alertRG.check(binding.notify.id)
+            getString(R.string.Alarm)->binding.alertRG.check(binding.alarm.id)
+            getString(R.string.Notify)->binding.alertRG.check(binding.notify.id)
 
         }
         when(sharedPreferences.getString(Setting.languageKey,getString(R.string.en)))
@@ -77,11 +77,11 @@ class SettingFragment : Fragment() {
         binding.alertRG.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 binding.alarm.id -> {
-                    editor.putString(Setting.alertKey,getString(R.string.alarm))
+                    editor.putString(Setting.alertKey,getString(R.string.Alarm))
                     editor.commit()
                 }
                 binding.notify.id -> {
-                    editor.putString(Setting.alertKey,getString(R.string.notification))
+                    editor.putString(Setting.alertKey,getString(R.string.Notify))
                     editor.commit()
                 }
             }

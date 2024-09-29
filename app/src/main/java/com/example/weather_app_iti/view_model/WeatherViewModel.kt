@@ -20,8 +20,8 @@ import kotlinx.coroutines.launch
 class WeatherViewModel(private var repo: IRepository):ViewModel() {
     private val favCities:MutableStateFlow<MutableList<FavouriteCity>> =MutableStateFlow(mutableListOf())
     var fav_cities:StateFlow<MutableList<FavouriteCity>> =favCities
-   private val alerts:MutableStateFlow<List<Alert>> = MutableStateFlow(mutableListOf())
-    var _alerts:StateFlow<List<Alert>> =alerts
+   private val alerts:MutableStateFlow<MutableList<Alert>> = MutableStateFlow(mutableListOf())
+    var _alerts:StateFlow<MutableList<Alert>> =alerts
     private var weatherData= MutableStateFlow<ApiState>(ApiState.Loading)
     var _weatherData:StateFlow<ApiState> =weatherData
     private var currentWeatherData= MutableStateFlow<ApiState>(ApiState.Loading)
@@ -53,9 +53,9 @@ class WeatherViewModel(private var repo: IRepository):ViewModel() {
     ) {
          viewModelScope.launch(Dispatchers.IO) {
           repo.getWeatherData(lat,lon,key,units,lang,fav).catch {
-              weatherData.value=ApiState.Failure(it)
+              weatherData.emit(ApiState.Failure(it))
           }.collect{
-             weatherData.value=ApiState.Success(it)
+             weatherData.emit(ApiState.Success(it))
           }
          }
     }
@@ -63,9 +63,9 @@ class WeatherViewModel(private var repo: IRepository):ViewModel() {
    fun getCurrentWeatherData(id: String, fav: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCurrentWeatherData(id, fav).catch {
-                currentWeatherData.value=ApiState.Failure(it)
+                currentWeatherData.emit(ApiState.Failure(it))
             } .collect{
-                    currentWeatherData.value = ApiState.Success(it)
+                    currentWeatherData.emit(ApiState.Success(it))
             }
         }
     }

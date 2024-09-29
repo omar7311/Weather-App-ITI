@@ -15,8 +15,8 @@ interface IRepository {
         fav: Boolean
     ): Flow<CurrentWeatherData>
 
-    suspend fun getFavourites(): Flow<MutableList<FavouriteCity>>
-    suspend fun getAlerts(): Flow<MutableList<Alert>>
+     fun getFavourites(): Flow<MutableList<FavouriteCity>>
+     fun getAlerts(): Flow<MutableList<Alert>>
      fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData>
 
     suspend fun insertCurrentWeatherData(currentWeatherData: CurrentWeatherData)

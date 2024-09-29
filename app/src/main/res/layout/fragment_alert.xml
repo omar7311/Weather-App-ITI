@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AlertFragment">
-
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/alert_recycle"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="@dimen/_18sdp"
-        android:text="@string/Alert" />
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        tools:listitem="@layout/fav_item"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="@dimen/_32sdp"
+        android:src="@drawable/baseline_add_24"/>
 
-</FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

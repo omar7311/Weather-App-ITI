@@ -19,6 +19,8 @@
     <string name="alert">التنبيه :</string>
     <string name="alarm">المنبه</string>
     <string name="notification">الاشعارات</string>
+    <string name="Alarm">alarm</string>
+    <string name="Notify">Notify</string>
     <string name="unit">الوحدات :</string>
     <string name="standard">Standard</string>
     <string name="metric">Metric</string>

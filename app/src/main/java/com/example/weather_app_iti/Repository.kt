@@ -3,7 +3,6 @@ package com.example.weather_app_iti
 import android.os.Build
 import androidx.annotation.RequiresApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class Repository(private val remoteDataSource: IRemoteDataSource,private val localDataSource: ILocalDataSource) :
     IRepository {
@@ -19,12 +18,12 @@ class Repository(private val remoteDataSource: IRemoteDataSource,private val loc
         return remoteDataSource.getWeatherData(lat,lon,key,units,lang,fav)
     }
 
-     override suspend fun getFavourites()= flow<MutableList<FavouriteCity>> {
-         emit(localDataSource.getFavourites())
+     override fun getFavourites(): Flow<MutableList<FavouriteCity>> {
+         return localDataSource.getFavourites()
     }
 
-     override suspend fun getAlerts()= flow<MutableList<Alert>> {
-         emit(localDataSource.getAlerts())
+     override fun getAlerts():Flow<MutableList<Alert>> {
+         return localDataSource.getAlerts()
     }
 
     override fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData> {

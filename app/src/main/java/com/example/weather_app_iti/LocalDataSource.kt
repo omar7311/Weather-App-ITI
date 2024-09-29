@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class LocalDataSource(private val context: Context) : ILocalDataSource {
-     override suspend fun getFavourites(): MutableList<FavouriteCity> {
+     override fun getFavourites(): Flow<MutableList<FavouriteCity>> {
      return WeatherDatabase.getInstance(context).getWeatherDao().getFavourites()
     }
-     override suspend fun getAlerts(): MutableList<Alert> {
+     override fun getAlerts(): Flow<MutableList<Alert>> {
          return WeatherDatabase.getInstance(context).getWeatherDao().getAlerts()
     }
      override fun getCurrentWeatherData(id: String, fav: Boolean): Flow<CurrentWeatherData>{

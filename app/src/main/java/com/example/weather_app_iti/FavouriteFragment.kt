@@ -1,59 +1,77 @@
 package com.example.weather_app_iti
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.mvvm.view_model.WeatherViewModelFactory
+import com.example.weather_app_iti.databinding.FragmentFavouriteBinding
+import com.example.weather_app_iti.view_model.WeatherViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FavouriteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FavouriteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    lateinit var binding:FragmentFavouriteBinding
+    lateinit var adapter: FavAdapter
+    lateinit var viewModel:WeatherViewModel
+    lateinit var factory:WeatherViewModelFactory
+    lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        setupViewModel()
+        viewModel.getFavourites()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourite, container, false)
+        binding=FragmentFavouriteBinding.inflate(inflater,container,false)
+        lifecycleScope.launch {
+        viewModel.fav_cities.collectLatest {
+            adapter = FavAdapter(it,{
+                    val fragment=HomeFragment()
+                val bundle=Bundle()
+                bundle.putDouble("lat",it.lat)
+                bundle.putDouble("lon",it.lon)
+                bundle.putBoolean("fav",true)
+                bundle.putString("city",it.city)
+                fragment.arguments=bundle
+                requireActivity().supportFragmentManager.beginTransaction().
+                replace(R.id.nav_host_fragment,fragment).commit()
+            },{
+                viewModel.deleteFavourite(it)
+            })
+            binding.favRecycle.adapter=adapter
+        }
+        }
+        binding.addFav.setOnClickListener {
+            if(sharedPreferences.getString(Setting.locationKey,getString(R.string.Gps))==getString(R.string.Map)) {
+                val fragment = MapsFragment()
+                fragment.label = "Favourite"
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.nav_host_fragment, fragment).commit()
+            }else{
+                Toast.makeText(requireContext(),"enable Map Location from Setting",Toast.LENGTH_LONG).show()
+            }
+        }
+        return binding.root
+    }
+    private fun setupViewModel(){
+        factory = WeatherViewModelFactory(
+            Repository(
+                RemoteDataSource(), LocalDataSource(requireContext())
+            )
+        )
+        viewModel = ViewModelProvider(this, factory)[WeatherViewModel::class.java]
+        sharedPreferences = requireActivity().getSharedPreferences("setup_setting",Context.MODE_PRIVATE)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavouriteFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavouriteFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
 }

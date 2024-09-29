@@ -18,6 +18,8 @@
     <string name="alert">Alert :</string>
     <string name="alarm">Alarm</string>
     <string name="notification">Notification</string>
+    <string name="Alarm">alarm</string>
+    <string name="Notify">Notify</string>
     <string name="unit">Units :</string>
     <string name="standard">Standard</string>
     <string name="metric">Metric</string>
@@ -39,4 +41,7 @@
     <string name="save">save</string>
     <string name="google_map">Google Map</string>
     <string name="reload">reload</string>
+    <string name="weather_app_alarm">Weather App alarm</string>
+    <string name="stop_alarm">Stop Alarm</string>
+    <string name="it_is_time_to_know_weather_news">it is time to know weather news</string>
 </resources>

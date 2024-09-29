@@ -2,6 +2,7 @@ package com.example.weather_app_iti
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "weather_table")
 data class CurrentWeatherData(
@@ -34,10 +35,10 @@ data class FavouriteCity(
 @Entity(tableName = "alert_table")
 data class Alert(
     @PrimaryKey
-    var id:String,
-    var date: String,
-    var time: String,
-)
+    var id:String="",
+    var date: String="",
+    var time: String="",
+) :Serializable
 data class List3hours(
     var time:String,
     var icon: String,

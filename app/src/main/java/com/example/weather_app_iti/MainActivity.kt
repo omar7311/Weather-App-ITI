@@ -33,9 +33,10 @@ class MainActivity : AppCompatActivity(),NavigationView.OnNavigationItemSelected
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        sharedPreferences=getPreferences(MODE_PRIVATE)
+        sharedPreferences=getSharedPreferences("setup_setting",Context.MODE_PRIVATE)
         val lang=sharedPreferences.getString(Setting.languageKey,getString(R.string.en))
-        if(lang!=null) Setting.setLocale(this,lang)
+        if(lang!=null){ Setting.setLocale(this,lang)}
+        else{Setting.setLocale(this,getString(R.string.en)) }
         setSupportActionBar(binding.toolBar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)

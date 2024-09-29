@@ -13,6 +13,7 @@ object Setting {
         const val locationKey="location_key"
         const val languageKey="language_key"
         const val unitsKey="units_key"
+           var alert= mutableListOf<Alert>()
 
         fun getImage(image: ImageView,icon:String){
                 when(icon){

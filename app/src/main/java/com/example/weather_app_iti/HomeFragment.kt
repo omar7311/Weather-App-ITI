@@ -38,6 +38,7 @@ import com.example.weather_app_iti.view_model.WeatherViewModel
 
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
             )
         )
         viewModel = ViewModelProvider(this, factory).get(WeatherViewModel::class.java)
-        sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        sharedPreferences = requireActivity().getSharedPreferences("setup_setting",Context.MODE_PRIVATE)
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun getLocationFromMap(lat:Double, lon:Double, fav:Boolean){
@@ -123,6 +124,7 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         if (checkPermission()) {
             if (enableLocation()) {
                 getWeather()
@@ -132,12 +134,15 @@ class HomeFragment : Fragment() {
         } else {
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
-
-
         return binding.root
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (!isInternetAvailable(requireContext())){
+             Snackbar.make(view,getString(R.string.no_internet_connection),Snackbar.LENGTH_LONG).show()
+        }
+    }
     private fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -182,7 +187,7 @@ class HomeFragment : Fragment() {
            }
         }
     }
-    private fun getCollectedRemoteData(){
+    private fun getCollectedRemoteData(cityName:String?){
         lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel._weatherData.collectLatest {
@@ -192,6 +197,10 @@ class HomeFragment : Fragment() {
                             val result = it.currentWeatherData
                             if (result != null) {
                                 binding.currentWeatherData = result
+                                if (cityName!=null){
+                                    binding.cityName.text=cityName
+                                    result.city=cityName
+                                }
                                 _3hoursAdapter = Weather3hoursAdapter(
                                     requireContext(),
                                     result.list3hours
@@ -203,9 +212,10 @@ class HomeFragment : Fragment() {
                                 binding.temp3hours.adapter = _3hoursAdapter
                                 binding.temp5days.adapter = _5daysAdapter
                                 Setting.getImage(binding.icon,result.icon)
-                                viewModel.deleteCurrentWeatherData(result.id)
-                                viewModel.insertCurrentWeatherData(result)
+
                                 if(!result.fav) {
+                                    viewModel.deleteCurrentWeatherData(result.id)
+                                    viewModel.insertCurrentWeatherData(result)
                                     sharedPreferences.edit().putString(
                                         "lat",
                                         result.lat.toString()
@@ -214,6 +224,8 @@ class HomeFragment : Fragment() {
                                         "lon",
                                         result.lon.toString()
                                     ).apply()
+                                }else{
+                                    viewModel.insertCurrentWeatherData(result)
                                 }
                             }
                         }
@@ -291,7 +303,7 @@ class HomeFragment : Fragment() {
             getString(R.string.Gps)->{
                 if(isInternetAvailable(requireContext())){
                    getFreshLocationUpdated()
-                    getCollectedRemoteData()
+                    getCollectedRemoteData(null)
                 }else{
                     getCollectedLocalData()
                 }
@@ -303,7 +315,7 @@ class HomeFragment : Fragment() {
                         getLocationFromMap(args.getDouble("lat"),
                             args.getDouble("lon"),
                             args.getBoolean("fav"))
-                        getCollectedRemoteData()
+                        getCollectedRemoteData( args.getString("city"))
                     }else{
                         viewModel.getCurrentWeatherData(
                             args.getDouble("lat").toString()+args.getDouble("lon").toString(),
@@ -355,7 +367,7 @@ class HomeFragment : Fragment() {
                         val lat = sharedPreferences.getString("lat", "")
                         val lon = sharedPreferences.getString("lon", "")
                         getLocationFromMap(lat?.toDouble()?:-34.0,lon?.toDouble()?:31.0,false)
-                        getCollectedRemoteData()
+                        getCollectedRemoteData(null)
                     }else{
                         getCollectedLocalData()
                     }

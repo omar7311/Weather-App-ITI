@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface WeatherDao {
     @Query("select * from fav_table")
-    suspend fun getFavourites(): MutableList<FavouriteCity>
+    fun getFavourites(): Flow<MutableList<FavouriteCity>>
     @Query("select * from alert_table")
-    suspend fun getAlerts(): MutableList<Alert>
+    fun getAlerts(): Flow<MutableList<Alert>>
     @Query("select * from weather_table where id=:id and fav=:fav")
     fun getCurrentWeatherData(id:String, fav:Boolean): Flow<CurrentWeatherData>
     @Insert(onConflict = OnConflictStrategy.IGNORE)
