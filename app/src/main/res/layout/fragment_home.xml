@@ -6,7 +6,7 @@
     <data>
         <variable
             name="currentWeatherData"
-            type="com.example.weather_app_iti.CurrentWeatherData" />
+            type="com.example.weather_app_iti.model.local.CurrentWeatherData" />
 
     </data>
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        tools:context=".HomeFragment">
+        tools:context=".view.home.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

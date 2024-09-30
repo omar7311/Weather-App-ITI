@@ -5,7 +5,7 @@
     <data>
         <variable
             name="list3hour"
-            type="com.example.weather_app_iti.List3hours" />
+            type="com.example.weather_app_iti.model.local.List3hours" />
 
     </data>
 

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="list5days"
-            type="com.example.weather_app_iti.List5days" />
+            type="com.example.weather_app_iti.model.local.List5days" />
 
     </data>
 

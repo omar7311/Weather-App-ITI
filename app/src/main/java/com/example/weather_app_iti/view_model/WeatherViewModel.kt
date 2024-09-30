@@ -2,15 +2,12 @@ package com.example.weather_app_iti.view_model
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weather_app_iti.Alert
-import com.example.weather_app_iti.CurrentWeatherData
-import com.example.weather_app_iti.FavouriteCity
-import com.example.weather_app_iti.IRepository
-import com.example.weather_app_iti.List3hours
+import com.example.weather_app_iti.model.local.Alert
+import com.example.weather_app_iti.model.local.CurrentWeatherData
+import com.example.weather_app_iti.model.local.FavouriteCity
+import com.example.weather_app_iti.model.repo.IRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,6 +1,6 @@
 package com.example.weather_app_iti.view_model
 
-import com.example.weather_app_iti.CurrentWeatherData
+import com.example.weather_app_iti.model.local.CurrentWeatherData
 
 sealed class ApiState {
     class Success(var currentWeatherData: CurrentWeatherData?):ApiState()

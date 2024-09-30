@@ -5,7 +5,7 @@
     <data>
         <variable
             name="favourite"
-            type="com.example.weather_app_iti.FavouriteCity" />
+            type="com.example.weather_app_iti.model.local.FavouriteCity" />
 
     </data>
 

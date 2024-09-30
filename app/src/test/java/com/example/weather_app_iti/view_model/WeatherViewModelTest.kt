@@ -1,18 +1,11 @@
 package com.example.weather_app_iti.view_model
 
-import androidx.lifecycle.viewModelScope
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.mvvm.view_model.WeatherViewModelFactory
-import com.example.weather_app_iti.Alert
-import com.example.weather_app_iti.CurrentWeatherData
-import com.example.weather_app_iti.FakeRepository
-import com.example.weather_app_iti.FavouriteCity
-import com.example.weather_app_iti.IRepository
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.example.weather_app_iti.model.local.Alert
+import com.example.weather_app_iti.model.repo.FakeRepository
+import com.example.weather_app_iti.model.local.FavouriteCity
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

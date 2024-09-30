@@ -1,6 +1,13 @@
 package com.example.weather_app_iti
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.weather_app_iti.model.local.Alert
+import com.example.weather_app_iti.model.local.FakeLocalDataSource
+import com.example.weather_app_iti.model.local.FavouriteCity
+import com.example.weather_app_iti.model.local.ILocalDataSource
+import com.example.weather_app_iti.model.remote.FakeRemoteDataSource
+import com.example.weather_app_iti.model.remote.IRemoteDataSource
+import com.example.weather_app_iti.model.repo.Repository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert
@@ -15,15 +22,15 @@ class RepositoryTest {
     val alert= Alert("123", "2024:2:1", "12:50:10")
     private  val list1= mutableListOf(fav)
     private  val list2= mutableListOf(alert)
-    private  lateinit var local:ILocalDataSource
-    private  lateinit var remote:IRemoteDataSource
-    private  lateinit var repo:Repository
+    private  lateinit var local: ILocalDataSource
+    private  lateinit var remote: IRemoteDataSource
+    private  lateinit var repo: Repository
 
     @Before
     fun setup(){
         //given
-        local=FakeLocalDataSource(list1,list2)
-        remote=FakeRemoteDataSource()
+        local= FakeLocalDataSource(list1,list2)
+        remote= FakeRemoteDataSource()
         repo= Repository(remote,local)
     }
     @Test

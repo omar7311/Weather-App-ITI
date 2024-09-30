@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".SettingFragment"
+    tools:context=".view.setting.SettingFragment"
     android:paddingTop="@dimen/_12sdp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
