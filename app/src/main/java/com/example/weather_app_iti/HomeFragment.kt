@@ -55,37 +55,41 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission())
-        { isGranted: Boolean ->
-            if (isGranted) {
-                // Permission granted, proceed with location access
-                if (enableLocation()) {
-                    getWeather()
+        requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission())
+            { isGranted: Boolean ->
+                if (isGranted) {
+                    // Permission granted, proceed with location access
+                    if (enableLocation()) {
+                        getWeather()
+                    } else {
+                        enableLocationServices()
+                    }
                 } else {
-                    enableLocationServices()
+                    // Permission denied, handle accordingly
+                    MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.need_permission))
+                        .setMessage(R.string.permission_message).setCancelable(false)
+                        .setPositiveButton(getString(R.string.ok)) { dialog, which ->
+                            requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        }.show()
                 }
-            } else {
-                // Permission denied, handle accordingly
-                MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.need_permission))
-                    .setMessage(R.string.permission_message).setCancelable(false)
-                    .setPositiveButton(getString(R.string.ok)) { dialog, which ->
-                        requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    }.show()
             }
-        }
         setupViewModel()
     }
-    private fun setupViewModel(){
+
+    private fun setupViewModel() {
         factory = WeatherViewModelFactory(
             Repository(
                 RemoteDataSource(), LocalDataSource(requireContext())
             )
         )
         viewModel = ViewModelProvider(this, factory).get(WeatherViewModel::class.java)
-        sharedPreferences = requireActivity().getSharedPreferences("setup_setting",Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireActivity().getSharedPreferences("setup_setting", Context.MODE_PRIVATE)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getLocationFromMap(lat:Double, lon:Double, fav:Boolean){
+    fun getLocationFromMap(lat: Double, lon: Double, fav: Boolean) {
         viewModel.getWeatherData(
             lat.toString(),
             lon.toString(),
@@ -95,6 +99,7 @@ class HomeFragment : Fragment() {
             fav
         )
     }
+
     fun checkPermission(): Boolean {
         return checkSelfPermission(
             requireContext(),
@@ -122,7 +127,11 @@ class HomeFragment : Fragment() {
 
     @SuppressLint("UnsafeRepeatOnLifecycleDetector")
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         if (checkPermission()) {
@@ -139,10 +148,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (!isInternetAvailable(requireContext())){
-             Snackbar.make(view,getString(R.string.no_internet_connection),Snackbar.LENGTH_LONG).show()
+        if (!isInternetAvailable(requireContext())) {
+            Snackbar.make(view, getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG)
+                .show()
         }
     }
+
     private fun isInternetAvailable(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -166,14 +177,14 @@ class HomeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
-    private fun getFreshLocationUpdated(){
+    private fun getFreshLocationUpdated() {
         val fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireActivity())
         fusedLocationProviderClient.lastLocation.addOnSuccessListener {
             val latitude = it.latitude.toString()
             val longitude = it.longitude.toString()
             lifecycleScope.launch {
-               repeatOnLifecycle(Lifecycle.State.STARTED){
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.getWeatherData(
                         latitude,
                         longitude,
@@ -184,12 +195,13 @@ class HomeFragment : Fragment() {
                     )
                 }
 
-           }
+            }
         }
     }
-    private fun getCollectedRemoteData(cityName:String?){
-        lifecycleScope.launch{
-            repeatOnLifecycle(Lifecycle.State.STARTED){
+
+    private fun getCollectedRemoteData(cityName: String?) {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel._weatherData.collectLatest {
                     when (it) {
                         is ApiState.Success -> {
@@ -197,9 +209,9 @@ class HomeFragment : Fragment() {
                             val result = it.currentWeatherData
                             if (result != null) {
                                 binding.currentWeatherData = result
-                                if (cityName!=null){
-                                    binding.cityName.text=cityName
-                                    result.city=cityName
+                                if (cityName != null) {
+                                    binding.cityName.text = cityName
+                                    result.city = cityName
                                 }
                                 _3hoursAdapter = Weather3hoursAdapter(
                                     requireContext(),
@@ -211,9 +223,9 @@ class HomeFragment : Fragment() {
                                 )
                                 binding.temp3hours.adapter = _3hoursAdapter
                                 binding.temp5days.adapter = _5daysAdapter
-                                Setting.getImage(binding.icon,result.icon)
+                                Setting.getImage(binding.icon, result.icon)
 
-                                if(!result.fav) {
+                                if (!result.fav) {
                                     viewModel.deleteCurrentWeatherData(result.id)
                                     viewModel.insertCurrentWeatherData(result)
                                     sharedPreferences.edit().putString(
@@ -224,7 +236,7 @@ class HomeFragment : Fragment() {
                                         "lon",
                                         result.lon.toString()
                                     ).apply()
-                                }else{
+                                } else {
                                     viewModel.insertCurrentWeatherData(result)
                                 }
                             }
@@ -249,7 +261,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getCollectedLocalData(){
+    private fun getCollectedLocalData() {
         val lat = sharedPreferences.getString("lat", "")
         val lon = sharedPreferences.getString("lon", "")
         viewModel.getCurrentWeatherData(lat + lon, false)
@@ -297,29 +309,33 @@ class HomeFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getWeather(){
-        val location=sharedPreferences.getString(Setting.locationKey,getString(R.string.Gps))
-        when(location){
-            getString(R.string.Gps)->{
-                if(isInternetAvailable(requireContext())){
-                   getFreshLocationUpdated()
+    private fun getWeather() {
+        val location = sharedPreferences.getString(Setting.locationKey, getString(R.string.Gps))
+        when (location) {
+            getString(R.string.Gps) -> {
+                if (isInternetAvailable(requireContext())) {
+                    getFreshLocationUpdated()
                     getCollectedRemoteData(null)
-                }else{
+                } else {
                     getCollectedLocalData()
                 }
             }
-            getString(R.string.Map)->{
-                val args=arguments
-                if (args!=null){
-                    if(isInternetAvailable(requireContext())){
-                        getLocationFromMap(args.getDouble("lat"),
+
+            getString(R.string.Map) -> {
+                val args = arguments
+                if (args != null) {
+                    if (isInternetAvailable(requireContext())) {
+                        getLocationFromMap(
+                            args.getDouble("lat"),
                             args.getDouble("lon"),
-                            args.getBoolean("fav"))
-                        getCollectedRemoteData( args.getString("city"))
-                    }else{
+                            args.getBoolean("fav")
+                        )
+                        getCollectedRemoteData(args.getString("city"))
+                    } else {
                         viewModel.getCurrentWeatherData(
-                            args.getDouble("lat").toString()+args.getDouble("lon").toString(),
-                            args.getBoolean("fav"))
+                            args.getDouble("lat").toString() + args.getDouble("lon").toString(),
+                            args.getBoolean("fav")
+                        )
                         lifecycleScope.launch {
                             repeatOnLifecycle(Lifecycle.State.STARTED) {
                                 viewModel._currentWeatherData.collectLatest {
@@ -338,7 +354,10 @@ class HomeFragment : Fragment() {
                                                 )
                                                 binding.temp3hours.adapter = _3hoursAdapter
                                                 binding.temp5days.adapter = _5daysAdapter
-                                                Setting.getImage(binding.icon, it.currentWeatherData?.icon ?: "")
+                                                Setting.getImage(
+                                                    binding.icon,
+                                                    it.currentWeatherData?.icon ?: ""
+                                                )
                                             } else {
                                                 showNoData()
                                             }
@@ -362,13 +381,13 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
-                }else{
-                    if(isInternetAvailable(requireContext())){
+                } else {
+                    if (isInternetAvailable(requireContext())) {
                         val lat = sharedPreferences.getString("lat", "")
                         val lon = sharedPreferences.getString("lon", "")
-                        getLocationFromMap(lat?.toDouble()?:-34.0,lon?.toDouble()?:31.0,false)
+                        getLocationFromMap(lat?.toDouble() ?: -34.0, lon?.toDouble() ?: 31.0, false)
                         getCollectedRemoteData(null)
-                    }else{
+                    } else {
                         getCollectedLocalData()
                     }
                 }

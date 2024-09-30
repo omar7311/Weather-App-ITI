@@ -30,6 +30,7 @@ class WeatherViewModel(private var repo: IRepository):ViewModel() {
          viewModelScope.launch {
              repo.getAlerts().collect{
                  alerts.emit(it)
+
              }
          }
 

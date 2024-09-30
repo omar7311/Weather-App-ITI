@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+
     implementation ("org.osmdroid:osmdroid-android:6.1.11")
     //gps-location
     implementation("com.google.android.gms:play-services-location:21.3.0")
@@ -86,4 +87,16 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    testImplementation ("org.hamcrest:hamcrest:2.2")
+    testImplementation ("org.hamcrest:hamcrest-library:2.2")
+    // AndroidX and Robolectric
+    testImplementation ("androidx.test.ext:junit-ktx:1.2.1")
+    testImplementation ("androidx.test:core-ktx:1.6.1")
+    testImplementation ("org.robolectric:robolectric:4.8")
+
+
+    //kotlinx-coroutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 }

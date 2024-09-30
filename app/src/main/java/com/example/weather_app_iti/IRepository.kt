@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import kotlinx.coroutines.flow.Flow
 
 interface IRepository {
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getWeatherData(
         lat: String,
